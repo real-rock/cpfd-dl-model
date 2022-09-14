@@ -78,7 +78,7 @@ def apply_moving_average(df, **kwargs):
         This returns new dataframe applied moving average.
     """
     window = kwargs_value('window', 20, kwargs)
-    min_peridos = kwargs_value('min_peridos', window, kwargs)
+    min_periods = kwargs_value('min_periods', window, kwargs)
     center = kwargs_value('center', True, kwargs)
     method = kwargs_value('method', 'mean', kwargs)
 
@@ -87,9 +87,9 @@ def apply_moving_average(df, **kwargs):
         cols = [x for x in df.columns if x not in kwargs['excludes']]
 
     if method == 'mean':
-        return df[cols].resample('1T').mean().rolling(window=window, center=center, min_periods=min_peridos).mean()
+        return df[cols].resample('1T').mean().rolling(window=window, center=center, min_periods=min_periods).mean()
     elif method == 'median':
-        return df[cols].resample('1T').mean().rolling(window=window, center=center, min_periods=min_peridos).median()
+        return df[cols].resample('1T').mean().rolling(window=window, center=center, min_periods=min_periods).median()
     else:
         print('[ERROR] Invalid moving average method')
         return None
@@ -226,8 +226,8 @@ def dfs_to_dataset(dfs, meta_df, inputs, outputs, **kwargs):
     for df in dfs:
         new_df = df.copy()
         if scale:
-            new_df = min_max_scale(new_df, meta, kwargs)
-        X, y = df_to_dataset(df, inputs, outputs, kwargs)
+            new_df = min_max_scale(new_df, meta_df, **kwargs)
+        X, y = df_to_dataset(new_df, inputs, outputs, **kwargs)
         Xs.append(X)
         ys.append(y)
     X = np.concatenate(Xs)

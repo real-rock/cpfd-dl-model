@@ -13,3 +13,4 @@ def plot(df, cols=None):
         fig.add_trace(go.Scatter(x=df.index, y=df[col].values, name=col), secondary_y=(df[col].mean() < 2))
     fig.update_traces(connectgaps=False)
     fig.show()
+    return fig
